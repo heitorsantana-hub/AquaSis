@@ -1,0 +1,58 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-sky-500">
+        <div class="text-slate-500 text-sm font-medium mb-1">Amostras Pendentes</div>
+        <div class="text-3xl font-bold text-slate-800">{{pendentesCount}}</div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-amber-500">
+        <div class="text-slate-500 text-sm font-medium mb-1">Aguardando Validação</div>
+        <div class="text-3xl font-bold text-slate-800">{{validacaoCount}}</div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-emerald-500">
+        <div class="text-slate-500 text-sm font-medium mb-1">Laudos Emitidos (Mês)</div>
+        <div class="text-3xl font-bold text-slate-800">{{laudosCount}}</div>
+    </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-100">
+        <h3 class="font-semibold text-slate-800">Últimas Amostras Cadastradas</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 text-slate-500 text-sm">
+                    <th class="py-3 px-6 font-medium">Protocolo</th>
+                    <th class="py-3 px-6 font-medium">Cliente</th>
+                    <th class="py-3 px-6 font-medium">Tipo</th>
+                    <th class="py-3 px-6 font-medium">Data Recebimento</th>
+                    <th class="py-3 px-6 font-medium">Status</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm divide-y divide-slate-100">
+                {{#each ultimasAmostras}}
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-3 px-6 font-semibold text-sky-600">{{this.protocolo}}</td>
+                    <td class="py-3 px-6 text-slate-700">{{this.clienteNome}}</td>
+                    <td class="py-3 px-6 text-slate-600">{{this.tipoAmostra}}</td>
+                    <td class="py-3 px-6 text-slate-600">{{this.dataRecebimento}}</td>
+                    <td class="py-3 px-6">
+                        <span class="px-2 py-1 rounded-full text-xs font-medium 
+                            {{#if (eq this.status 'Recebida')}}bg-sky-100 text-sky-700{{/if}}
+                            {{#if (eq this.status 'Em Análise')}}bg-amber-100 text-amber-700{{/if}}
+                            {{#if (eq this.status 'Concluído')}}bg-emerald-100 text-emerald-700{{/if}}">
+                            {{this.status}}
+                        </span>
+                    </td>
+                </tr>
+                {{/each}}
+                {{#unless ultimasAmostras}}
+                <tr>
+                    <td colspan="5" class="py-6 text-center text-slate-400">Nenhuma amostra cadastrada recentemente.</td>
+                </tr>
+                {{/unless}}
+            </tbody>
+        </table>
+    </div>
+</div>

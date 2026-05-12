@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSis - Gestão Laboratorial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-sky-900 text-white flex flex-col">
+        <div class="p-6 text-center border-b border-sky-800">
+            <h1 class="text-2xl font-bold text-sky-300"><i class="fa-solid fa-flask-vial mr-2"></i>AquaSis</h1>
+            <p class="text-xs text-sky-200 mt-1">Laboratório Digital</p>
+        </div>
+        
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="/dashboard" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeDashboard}}bg-sky-800{{/if}}">
+                <i class="fa-solid fa-chart-pie w-6"></i> Dashboard
+            </a>
+            <a href="/amostras/nova" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeCadastro}}bg-sky-800{{/if}}">
+                <i class="fa-solid fa-file-circle-plus w-6"></i> Nova Amostra
+            </a>
+            <a href="/clientes/novo" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeCliente}}bg-sky-800{{/if}}">
+                <i class="fa-solid fa-users w-6"></i> Clientes
+            </a>
+            
+            {{#if isAdmin}}
+            <div class="pt-4 mt-4 border-t border-sky-800">
+                <p class="px-3 text-xs font-semibold text-sky-400 uppercase tracking-wider mb-2">Administração</p>
+                <a href="/relatorios" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeRelatorios}}bg-sky-800{{/if}}">
+                    <i class="fa-solid fa-file-pdf w-6"></i> Relatórios e Laudos
+                </a>
+
+                <a href="/funcionarios" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionario}}bg-sky-800{{/if}}">
+                    <i class="fa-solid fa-user-shield w-6"></i> Equipe / Funcionários
+                </a>
+
+                <a href="/funcionarios/novo" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionario}}bg-sky-800{{/if}}">
+                    <i class="fa-solid fa-user-shield w-6"></i> Cadastro / Funcionários
+                </a>
+            </div>
+            {{/if}}
+        </nav>
+
+        <div class="p-4 border-t border-sky-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-sky-700 flex items-center justify-center font-bold">
+                    {{userInitials}}
+                </div>
+                <div>
+                    <p class="text-sm font-semibold">{{userName}}</p>
+                    <p class="text-xs text-sky-300">{{userRole}}</p>
+                </div>
+            </div>
+            <a href="/logout" class="block mt-4 text-sm text-red-400 hover:text-red-300 text-center"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sair</a>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-y-auto">
+        <header class="bg-white shadow-sm p-6 flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-slate-800">{{pageTitle}}</h2>
+            <div class="flex gap-4">
+                <button class="text-slate-400 hover:text-sky-600"><i class="fa-solid fa-bell"></i></button>
+            </div>
+        </header>
+
+        <div class="p-6">
+            {{{body}}}
+        </div>
+    </main>
+
+</body>
+</html>
