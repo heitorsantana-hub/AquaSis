@@ -14,13 +14,16 @@ router.get("/dashboard", protegerRota, DashboardController.renderDashboard);
 //Rota de relatorios e laudos
 router.get("/relatorios", protegerRota, RelatorioController.renderRelatorios);
 
+//Rota de listagem de clientes
+router.get("/clientes", protegerRota, ClienteController.renderLista);
+
 // Rota para listar os funcionários ativos
 router.get("/funcionarios", protegerRota, FuncionarioController.renderLista);
 
 router.get("/clientes/novo", protegerRota, (req, res) => {
   res.render("cadastro-cliente", {
     pageTitle: "Cadastrar Cliente",
-    activeClientes: true,
+    activeCliente: true,
   });
 });
 
@@ -28,10 +31,13 @@ router.get("/clientes/novo", protegerRota, (req, res) => {
 router.get("/amostras/nova", protegerRota, AmostraController.renderNova);
 router.post("/amostras/salvar", protegerRota, AmostraController.salvar);
 
+//Listagem de Amostras
+router.get("/amostras", protegerRota, AmostraController.renderLista);
+
 router.get("/funcionarios/novo", protegerRota, (req, res) => {
   res.render("cadastro-funcionario", {
     pageTitle: "Cadastrar Funcionário",
-    activeFuncionarios: true,
+    activeFuncionarioC: true,
   });
 });
 

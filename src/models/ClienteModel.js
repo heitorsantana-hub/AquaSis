@@ -29,6 +29,37 @@ class ClienteModel {
 
     return data;
   }
+
+  // Busca um cliente específico pelo ID
+  static async buscarPorId(id) {
+    const { data, error } = await supabase
+      .from("clientes")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  // Atualiza os dados de um cliente existente
+  static async atualizar(id, dadosCliente) {
+    const { data, error } = await supabase
+      .from("clientes")
+      .update(dadosCliente)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === "23505") {
+        throw new Error("Este CNPJ/CPF já está cadastrado em outro cliente.");
+      }
+      throw error;
+    }
+
+    return data;
+  }
 }
 
 module.exports = ClienteModel;

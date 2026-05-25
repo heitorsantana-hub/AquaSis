@@ -2,6 +2,11 @@
 const FuncionarioModel = require("../models/FuncionarioModel");
 
 class AuthController {
+  //Método para exibir tela de lading page
+  static renderHome(req, res) {
+    res.render("home", { layout: "home" });
+  }
+
   // Método para exibir a tela de login (GET)
   static renderLogin(req, res) {
     // Se já estiver logado, joga pro dashboard

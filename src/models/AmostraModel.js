@@ -100,5 +100,20 @@ class AmostraModel {
     if (error) throw error;
     return data;
   }
+
+  //Listar todos os dados na view listagem
+  static async listarTodas() {
+    const { data, error } = await supabase
+      .from("amostras")
+      .select(
+        `
+          *,
+          clientes(nome)
+        `,
+      )
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return data;
+  }
 }
 module.exports = AmostraModel;

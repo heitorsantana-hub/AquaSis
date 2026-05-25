@@ -1,58 +1,269 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-sky-500">
-        <div class="text-slate-500 text-sm font-medium mb-1">Amostras Pendentes</div>
-        <div class="text-3xl font-bold text-slate-800">{{pendentesCount}}</div>
-    </div>
-    
-    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-amber-500">
-        <div class="text-slate-500 text-sm font-medium mb-1">Aguardando Validação</div>
-        <div class="text-3xl font-bold text-slate-800">{{validacaoCount}}</div>
+<div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-semibold text-slate-800">Visão Geral</h1>
+    <a href="/relatorios" class="hidden sm:inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium py-2 px-4 rounded-lg shadow-sm transition-colors">
+        <i class="fa-solid fa-download"></i> Ir para Laudos
+    </a>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+
+    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-sky-500 flex items-center justify-between">
+        <div>
+            <p class="text-xs font-bold text-sky-600 uppercase tracking-wide mb-1">Faturamento (Mensal)</p>
+            <h3 class="text-2xl font-bold text-slate-800">R$ {{faturamentoMensal}}</h3>
+        </div>
+        <i class="fa-solid fa-calendar text-3xl text-slate-300"></i>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-emerald-500">
-        <div class="text-slate-500 text-sm font-medium mb-1">Laudos Emitidos (Mês)</div>
-        <div class="text-3xl font-bold text-slate-800">{{laudosCount}}</div>
+    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-emerald-500 flex items-center justify-between">
+        <div>
+            <p class="text-xs font-bold text-emerald-500 uppercase tracking-wide mb-1">Faturamento (Anual)</p>
+            <h3 class="text-2xl font-bold text-slate-800">R$ {{faturamentoAnual}}</h3>
+        </div>
+        <i class="fa-solid fa-dollar-sign text-3xl text-slate-300"></i>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-cyan-500 flex items-center justify-between">
+        <div class="w-full mr-4">
+            <p class="text-xs font-bold text-cyan-600 uppercase tracking-wide mb-1">Taxa de Conclusão</p>
+            <div class="flex items-center gap-3">
+                <h3 class="text-2xl font-bold text-slate-800">{{taxaProcessamento}}%</h3>
+                <div class="w-full bg-slate-200 rounded-full h-2.5">
+                    <div class="bg-cyan-500 h-2.5 rounded-full" style="width: {{taxaProcessamento}}%"></div>
+                </div>
+            </div>
+        </div>
+        <i class="fa-solid fa-flask text-3xl text-slate-300"></i>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-amber-500 flex items-center justify-between">
+        <div>
+            <p class="text-xs font-bold text-amber-500 uppercase tracking-wide mb-1">Amostras Pendentes</p>
+            <h3 class="text-2xl font-bold text-slate-800">{{amostrasPendentes}}</h3>
+        </div>
+        <i class="fa-solid fa-clock text-3xl text-slate-300"></i>
+    </div>
+
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow-sm lg:col-span-2">
+        <div class="border-b border-slate-100 p-4 flex justify-between items-center">
+            <h6 class="font-bold text-sky-700">Visão de Faturamento</h6>
+            <button class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
+        <div class="p-4">
+            <div class="relative h-72 w-full"><canvas id="myAreaChart"></canvas></div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm lg:col-span-1">
+        <div class="border-b border-slate-100 p-4 flex justify-between items-center">
+            <h6 class="font-bold text-sky-700">Origem das Amostras</h6>
+            <button class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        </div>
+        <div class="p-4">
+            <div class="relative h-60 w-full"><canvas id="myPieChart"></canvas></div>
+            <div class="mt-4 flex justify-center gap-4 text-sm text-slate-600">
+                <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-sky-500 text-[10px]"></i> Direto</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-emerald-500 text-[10px]"></i> Parcerias</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-circle text-cyan-500 text-[10px]"></i> Indicação</span>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="bg-white rounded-xl shadow-sm overflow-hidden">
-    <div class="px-6 py-4 border-b border-slate-100">
-        <h3 class="font-semibold text-slate-800">Últimas Amostras Cadastradas</h3>
-    </div>
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-slate-50 text-slate-500 text-sm">
-                    <th class="py-3 px-6 font-medium">Protocolo</th>
-                    <th class="py-3 px-6 font-medium">Cliente</th>
-                    <th class="py-3 px-6 font-medium">Tipo</th>
-                    <th class="py-3 px-6 font-medium">Data Recebimento</th>
-                    <th class="py-3 px-6 font-medium">Status</th>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="border-b border-slate-100 p-4 flex justify-between items-center">
+            <h6 class="font-bold text-sky-700">Últimas Amostras Recebidas</h6>
+            <a href="/amostras" class="text-sm text-sky-500 hover:text-sky-600 font-medium">Ver Todas</a>
+        </div>
+        <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 text-slate-500">
+                <tr>
+                    <th class="px-4 py-3 font-medium">Protocolo</th>
+                    <th class="px-4 py-3 font-medium">Cliente</th>
+                    <th class="px-4 py-3 font-medium">Status</th>
                 </tr>
             </thead>
-            <tbody class="text-sm divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-100">
                 {{#each ultimasAmostras}}
-                <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="py-3 px-6 font-semibold text-sky-600">{{this.protocolo}}</td>
-                    <td class="py-3 px-6 text-slate-700">{{this.clienteNome}}</td>
-                    <td class="py-3 px-6 text-slate-600">{{this.tipoAmostra}}</td>
-                    <td class="py-3 px-6 text-slate-600">{{this.dataRecebimento}}</td>
-                    <td class="py-3 px-6">
-                        <span class="px-2 py-1 rounded-full text-xs font-medium 
-                            {{#if (eq this.status 'Recebida')}}bg-sky-100 text-sky-700{{/if}}
-                            {{#if (eq this.status 'Em Análise')}}bg-amber-100 text-amber-700{{/if}}
-                            {{#if (eq this.status 'Concluído')}}bg-emerald-100 text-emerald-700{{/if}}">
-                            {{this.status}}
-                        </span>
+                <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-semibold text-slate-700">{{this.protocolo}}</td>
+                    <td class="px-4 py-3 text-slate-600">{{this.clientes.nome}}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-medium">{{this.status}}</span>
                     </td>
                 </tr>
-                {{/each}}
-                {{#unless ultimasAmostras}}
+                {{else}}
                 <tr>
-                    <td colspan="5" class="py-6 text-center text-slate-400">Nenhuma amostra cadastrada recentemente.</td>
+                    <td colspan="3" class="px-4 py-6 text-center text-slate-500">Nenhuma amostra recente.</td>
                 </tr>
-                {{/unless}}
+                {{/each}}
             </tbody>
         </table>
     </div>
+
+    <div class="bg-white rounded-lg shadow-sm">
+    <div class="border-b border-slate-100 p-4 flex justify-between items-center">
+        <h6 class="font-bold text-sky-700">Avisos Operacionais</h6>
+        <span class="bg-rose-100 text-rose-600 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">2 Alertas</span>
+    </div>
+    
+    <div class="p-4 space-y-3">
+        <div class="flex items-start gap-3 p-3 bg-rose-50 border border-rose-100 rounded-lg transition-colors hover:bg-rose-100/50">
+            <i class="fa-solid fa-triangle-exclamation text-rose-500 mt-0.5"></i>
+            <div>
+                <h4 class="text-sm font-semibold text-rose-800">Amostras com Prazo Crítico</h4>
+                <p class="text-xs text-rose-600 mt-1">Existem 3 amostras aguardando validação do químico responsável há mais de 48 horas.</p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 bg-amber-50 border border-amber-100 rounded-lg transition-colors hover:bg-amber-100/50">
+            <i class="fa-solid fa-screwdriver-wrench text-amber-500 mt-0.5"></i>
+            <div>
+                <h4 class="text-sm font-semibold text-amber-800">Calibração de Equipamento</h4>
+                <p class="text-xs text-amber-700 mt-1">O Espectrofotômetro principal (EQP-04) precisa de calibração preventiva em 2 dias.</p>
+            </div>
+        </div>
+
+        <div class="flex items-start gap-3 p-3 bg-sky-50 border border-sky-100 rounded-lg transition-colors hover:bg-sky-100/50">
+            <i class="fa-solid fa-flask-vial text-sky-500 mt-0.5"></i>
+            <div>
+                <h4 class="text-sm font-semibold text-sky-800">Estoque de Reagentes</h4>
+                <p class="text-xs text-sky-700 mt-1">Novo lote de reagentes recebido. Nenhum item próximo do vencimento nos próximos 15 dias.</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+</div>
+
+<script src="vendor/chart.js/Chart.min.js"></script>
+<script src="js/demo/chart-area-demo.js"></script>
+<script src="js/demo/chart-pie-demo.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // =======================================================
+    // 1. GRÁFICO DE LINHA: Visão de Faturamento (myAreaChart)
+    // =======================================================
+    const ctxArea = document.getElementById('myAreaChart');
+    
+    if (ctxArea) {
+        // Criar um gradiente azulado (Sky 500) para o fundo do gráfico
+        const gradientArea = ctxArea.getContext('2d').createLinearGradient(0, 0, 0, 300);
+        gradientArea.addColorStop(0, 'rgba(14, 165, 233, 0.4)'); // Sky 500 com opacidade
+        gradientArea.addColorStop(1, 'rgba(14, 165, 233, 0.0)');
+
+        new Chart(ctxArea, {
+            type: 'line',
+            data: {
+                // Aqui entram os meses. (No futuro, o backend Node.js pode enviar isto dinamicamente)
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [{
+                    label: 'Faturamento (R$)',
+                    data: [12500, 18200, 15400, 26800, 22500, 40000], 
+                    backgroundColor: gradientArea,
+                    borderColor: '#0ea5e9', // Sky 500
+                    borderWidth: 3,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#0ea5e9',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.4 // Deixa a curva suave
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        padding: 12,
+                        titleFont: { size: 13, family: 'Inter' },
+                        bodyFont: { size: 14, family: 'Inter', weight: 'bold' },
+                        callbacks: {
+                            label: function(context) {
+                                return ' R$ ' + context.parsed.y.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#64748b', font: { family: 'Inter' } }
+                    },
+                    y: {
+                        grid: { color: '#f1f5f9', borderDash: [5, 5] },
+                        ticks: {
+                            color: '#64748b',
+                            font: { family: 'Inter' },
+                            callback: function(value) { return 'R$ ' + value; }
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // =======================================================
+    // 2. GRÁFICO DE ROSCA: Origem das Amostras (myPieChart)
+    // =======================================================
+    const ctxPie = document.getElementById('myPieChart');
+    
+    if (ctxPie) {
+        new Chart(ctxPie, {
+            type: 'doughnut',
+            data: {
+                labels: ['Direto', 'Parcerias', 'Indicação'],
+                datasets: [{
+                    // Dados fictícios das origens (Ex: 55% direto, 30% parcerias...)
+                    data: [55, 30, 15],
+                    backgroundColor: [
+                        '#0ea5e9', // Sky 500 (Azul)
+                        '#10b981', // Emerald 500 (Verde)
+                        '#06b6d4'  // Cyan 500 (Ciano)
+                    ],
+                    hoverBackgroundColor: [
+                        '#0284c7', // Sky 600
+                        '#059669', // Emerald 600
+                        '#0891b2'  // Cyan 600
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%', // Define a grossura da rosca
+                plugins: {
+                    legend: { display: false }, // Escondemos a legenda padrão para usar a sua de HTML
+                    tooltip: {
+                        backgroundColor: '#0f172a',
+                        padding: 12,
+                        bodyFont: { size: 14, family: 'Inter', weight: 'bold' },
+                        callbacks: {
+                            label: function(context) {
+                                return ' ' + context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+});
+</script>

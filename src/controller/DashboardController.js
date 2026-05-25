@@ -4,39 +4,39 @@ const AmostraModel = require("../models/AmostraModel");
 class DashboardController {
   static async renderDashboard(req, res) {
     try {
-      // 1. Busca os dados no Model
-      const stats = await AmostraModel.obterEstatisticas();
-      const ultimas = await AmostraModel.listarUltimas(5); // Pega as 5 mais recentes
+      // 1. Buscamos os dados reais do banco usando o seu Model
+      const estatisticas = await AmostraModel.obterEstatisticas();
+      const ultimasAmostras = await AmostraModel.listarUltimas(5);
 
-      // 2. Formata o array para o Handlebars entender ({{clienteNome}}, etc)
-      const ultimasAmostrasFormatadas = ultimas.map((amostra) => {
-        // Formata a data de AAAA-MM-DD para DD/MM/AAAA (opcional, mas fica mais bonito)
-        const [ano, mes, dia] = amostra.data_recebimento.split("-");
-        const dataFormatada = `${dia}/${mes}/${ano}`;
+      // 2. Realizamos a lógica de negócio (Cálculos)
+      const amostrasPendentes = estatisticas.pendentes + estatisticas.validacao;
+      const totalAmostras = amostrasPendentes + estatisticas.laudos;
 
-        return {
-          protocolo: amostra.protocolo,
-          clienteNome: amostra.clientes
-            ? amostra.clientes.nome
-            : "Cliente Removido",
-          tipoAmostra: amostra.tipo_amostra,
-          dataRecebimento: dataFormatada,
-          status: amostra.status,
-        };
-      });
+      // Calcula a % de amostras já concluídas (evita divisão por zero)
+      const taxaProcessamento =
+        totalAmostras === 0
+          ? 0
+          : Math.round((estatisticas.laudos / totalAmostras) * 100);
 
-      // 3. Envia tudo para a view
+      // ATENÇÃO: Como não há método financeiro nos models enviados,
+      // as variáveis de faturamento estão mockadas. Futuramente você substitui
+      // por chamadas como `await FinanceiroModel.obterFaturamentoMensal()`.
+      const faturamentoMensal = "40.000,00";
+      const faturamentoAnual = "215.000,00";
+
+      // 3. Renderizamos a página passando o objeto com as variáveis do Handlebars
       res.render("dashboard", {
-        pageTitle: "Dashboard Executivo",
-        activeDashboard: true,
-        pendentesCount: stats.pendentes,
-        validacaoCount: stats.validacao,
-        laudosCount: stats.laudos,
-        ultimasAmostras: ultimasAmostrasFormatadas,
+        pageTitle: "Visão Geral",
+        activeDashboard: true, // Acende o botão na sidebar
+        faturamentoMensal,
+        faturamentoAnual,
+        taxaProcessamento,
+        amostrasPendentes,
+        ultimasAmostras,
       });
     } catch (error) {
-      console.error("Erro ao carregar o dashboard:", error);
-      res.status(500).send("Erro interno ao carregar o painel.");
+      console.error("Erro ao processar os dados do dashboard:", error);
+      res.status(500).send("Erro interno ao renderizar o dashboard.");
     }
   }
 }

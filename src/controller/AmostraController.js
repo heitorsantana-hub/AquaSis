@@ -82,5 +82,31 @@ class AmostraController {
       res.status(500).send("Erro ao salvar amostra no banco de dados.");
     }
   }
+
+  static async renderLista(req, res) {
+    try {
+      //Chamando o banco para dentro do controller
+      const amostrasBanco = await AmostraModel.listarTodas();
+
+      const amostrasFormatadas = amostrasBanco.map((amostra) => ({
+        _id: amostra.id,
+        protocolo: amostra.protocolo,
+        tipo_amostra: amostra.tipo_amostra,
+        data_recebimento: amostra.data_recebimento,
+        status: amostra.status,
+        data_coleta: amostra.data_coleta,
+        hora_coleta: amostra.hora_coleta,
+        cliente_nome: amostra.clientes?.nome || "Cliente sem Nome",
+      }));
+
+      res.render("lista-amostra", {
+        pageTitle: "Listagem de Amostra",
+        activeAmostrasL: true,
+        amostras: amostrasFormatadas,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 module.exports = AmostraController;

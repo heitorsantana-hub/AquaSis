@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AquaSis - Gestão Laboratorial</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
     </style>
+
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body class="bg-slate-50 flex h-screen overflow-hidden">
 
@@ -23,13 +32,25 @@
             <a href="/dashboard" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeDashboard}}bg-sky-800{{/if}}">
                 <i class="fa-solid fa-chart-pie w-6"></i> Dashboard
             </a>
-            <a href="/amostras/nova" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeCadastro}}bg-sky-800{{/if}}">
+            
+            <a href="/amostras/nova" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeAmostras}}bg-sky-800{{/if}}">
                 <i class="fa-solid fa-file-circle-plus w-6"></i> Nova Amostra
             </a>
+            
+            <a href="/amostras" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeAmostrasL}}bg-sky-800{{/if}}">
+                <i class="fa-solid fa-vials w-6"></i>
+                <span>Listagem de Amostras</span>
+            </a>
+
             <a href="/clientes/novo" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeCliente}}bg-sky-800{{/if}}">
-                <i class="fa-solid fa-users w-6"></i> Clientes
+                <i class="fa-solid fa-users w-6"></i> Novo Cliente
             </a>
             
+            <a href="/clientes" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeClienteL}}bg-sky-800{{/if}}">
+                <i class="fa-solid fa-list w-6"></i>
+                <span>Listagem de Clientes</span>
+            </a>
+
             {{#if isAdmin}}
             <div class="pt-4 mt-4 border-t border-sky-800">
                 <p class="px-3 text-xs font-semibold text-sky-400 uppercase tracking-wider mb-2">Administração</p>
@@ -37,12 +58,12 @@
                     <i class="fa-solid fa-file-pdf w-6"></i> Relatórios e Laudos
                 </a>
 
-                <a href="/funcionarios" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionario}}bg-sky-800{{/if}}">
+                <a href="/funcionarios" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionariosE}}bg-sky-800{{/if}}">
                     <i class="fa-solid fa-user-shield w-6"></i> Equipe / Funcionários
                 </a>
 
-                <a href="/funcionarios/novo" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionario}}bg-sky-800{{/if}}">
-                    <i class="fa-solid fa-user-shield w-6"></i> Cadastro / Funcionários
+                <a href="/funcionarios/novo" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionarioC}}bg-sky-800{{/if}}">
+                    <i class="fa-solid fa-user-plus w-6"></i> Cadastro / Funcionários
                 </a>
             </div>
             {{/if}}

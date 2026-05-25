@@ -27,7 +27,7 @@ class FuncionarioController {
 
       res.render("lista-funcionario", {
         pageTitle: "Equipe do Laboratório",
-        activeFuncionarios: true,
+        activeFuncionariosE: true,
         funcionarios: funcionariosFormatados,
       });
     } catch (error) {
@@ -87,7 +87,7 @@ class FuncionarioController {
       // Se der erro (ex: e-mail repetido), recarrega a tela de cadastro enviando a mensagem de erro
       res.render("cadastro-funcionario", {
         pageTitle: "Cadastrar Funcionário",
-        activeFuncionarios: true,
+        activeFuncionariosE: true,
         erro: error.message,
       });
     }
