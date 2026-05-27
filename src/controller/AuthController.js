@@ -4,7 +4,7 @@ const FuncionarioModel = require("../models/FuncionarioModel");
 class AuthController {
   //Método para exibir tela de lading page
   static renderHome(req, res) {
-    res.render("home", { layout: "home" });
+    res.render("home", { layout: false });
   }
 
   // Método para exibir a tela de login (GET)
