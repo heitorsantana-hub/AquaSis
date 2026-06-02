@@ -24,8 +24,13 @@
         </div>
         <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">Tipo de Amostra</label>
-            <input type="text" name="tipo_amostra" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none" id="" required>
-            <a href="">Adicionar Nova Amostra</a>
+            <select name="tipo_amostra" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none" required>
+                <option value="" disabled selected>Selecione amostra cadastrada...</option>
+                {{#each clientes}}
+                <option value="{{this.id}}">{{this.nome}} ({{this.documento}})</option>
+                {{/each}}
+            </select>
+            <a href="">Adicionar Nova Determinação</a>
         </div>
         
         <div class="grid grid-cols-2 gap-4">
@@ -42,11 +47,11 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-2">Data de Recebimento</label>
-                <input type="date" name="data_recebimento" value="{{dataAtual}}" class="w-full border border-slate-300 bg-slate-50 rounded-lg p-2.5" readonly>
+                <input type="date" name="data_recebimento" class="w-full border border-slate-300 rounded-lg p-2.5 outline-none" required>
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-2">Hora de Recebimento</label>
-                <input type="time" name="hora_recebimento" value="{{horaAtual}}" class="w-full border border-slate-300 bg-slate-50 rounded-lg p-2.5" readonly>
+                <input type="time" name="hora_recebimento"class="w-full border border-slate-300 rounded-lg p-2.5 outline-none" required>
             </div>
         </div>
     </div>
@@ -97,7 +102,7 @@
         </div>
     </div>
 
-    <h4 class="font-semibold text-slate-800 mb-4 border-b border-slate-100 pb-2">Análises Solicitadas</h4>
+    <h4 class="font-semibold text-slate-800 mb-4 border-b border-slate-100 pb-2">Determinações</h4>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {{#each analisesDisponiveis}}
         <label class="flex items-center p-3 border border-slate-200 rounded-lg hover:bg-sky-50 cursor-pointer transition-colors">
