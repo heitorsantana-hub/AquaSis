@@ -60,6 +60,18 @@ class ClienteModel {
 
     return data;
   }
+
+  //Deletar usuário
+  static async delete(id) {
+    const { data, error } = await supabase
+      .from("clientes")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.log("Erro: " + error);
+    }
+  }
 }
 
 module.exports = ClienteModel;

@@ -94,6 +94,8 @@
         
         <form id="editForm" method="POST">
             <div class="p-6 space-y-4 text-sm">
+
+                <input type="hidden" name="id" id="edit-id">
                 
                 <div>
                     <label class="block text-slate-700 font-medium mb-1">Nome Completo / Empresa</label>
@@ -156,6 +158,9 @@
         document.getElementById('edit-nome').value = nome;
         document.getElementById('edit-email').value = email;
         document.getElementById('edit-telefone').value = telefone;
+
+        // PREENCHE O CAMPO ESCONDIDO COM O ID!
+        document.getElementById('edit-id').value = id;
         
         // Define a rota do formulário
         document.getElementById('editForm').action = `/clientes/editar/${id}`;

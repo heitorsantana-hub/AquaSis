@@ -60,7 +60,7 @@
                         <div class="flex items-center justify-end gap-2">
                             
                             <button type="button" onclick="openEditModal(this)"
-                                data-id="{{this.id}}"
+                                data-id="{{this._id}}"
                                 data-protocolo="{{this.protocolo}}"
                                 data-status="{{this.status}}"
                                 data-tipo="{{this.tipo_amostra}}"
@@ -70,7 +70,7 @@
                             </button>
 
                             <form action="/amostras/deletar" method="POST" onsubmit="return confirm('ATENÇÃO: A exclusão da amostra {{this.protocolo}} apagará também todos os resultados vinculados. Deseja continuar?')" class="m-0">
-                                <input type="hidden" name="amostra_id" value="{{this.id}}">
+                                <input type="hidden" name="amostra_id" value="{{this._id}}">
                                 <button type="submit" 
                                     class="w-8 h-8 rounded-md flex items-center justify-center text-rose-500 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors"
                                     title="Excluir Amostra">

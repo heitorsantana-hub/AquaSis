@@ -1,4 +1,5 @@
 // controllers/ClienteController.js
+const supabase = require("../../config/supabase");
 const ClienteModel = require("../models/ClienteModel");
 const { isCPF } = require("validation-br");
 
@@ -111,7 +112,7 @@ class ClienteController {
 
   // Recebe os dados alterados e salva no banco (POST)
   static async atualizar(req, res) {
-    const { id } = req.params;
+    const id = req.params.id;
     try {
       const {
         nome,
@@ -124,9 +125,6 @@ class ClienteController {
         cidade,
         estado,
       } = req.body;
-
-      // Reutilizamos a sua validação do validation-br aqui (lembre de importar o isCPF se for usar)
-      // Para simplificar o exemplo, vamos direto para a atualização:
 
       const dadosAtualizados = {
         nome,
@@ -143,7 +141,7 @@ class ClienteController {
       await ClienteModel.atualizar(id, dadosAtualizados);
 
       // Redireciona para o dashboard ou lista após o sucesso
-      res.redirect("/dashboard");
+      res.status(201).redirect("/clientes");
     } catch (error) {
       console.error("Erro ao atualizar cliente:", error.message);
       res.render("cadastro-cliente", {
@@ -155,6 +153,15 @@ class ClienteController {
       });
     }
   }
-}
 
+  static async deletar(req, res) {
+    const id = req.body.cliente_id;
+
+    await ClienteModel.delete(id);
+
+    return res.status(201).redirect("/clientes");
+  }
+
+  //função de apagar o cliente
+}
 module.exports = ClienteController;

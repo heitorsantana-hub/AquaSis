@@ -2,6 +2,7 @@
 const ClienteModel = require("../models/ClienteModel");
 const ParametroModel = require("../models/ParametroModel.js");
 const AmostraModel = require("../models/AmostraModel");
+const supabase = require("../../config/supabase.js");
 
 class AmostraController {
   // Renderiza a tela de Nova Amostra (GET)
@@ -107,6 +108,32 @@ class AmostraController {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  static async delete(req, res) {
+    try {
+      //pegando id do html
+      const amostra_id = req.body.amostra_id;
+      console.log("Id que apareceu: " + amostra_id);
+
+      //puxando a função que apaga no banco de dados
+      const { data, error } = await supabase
+        .from("amostras") //qual tabela
+        .delete() //função de apagar
+        .eq("id", amostra_id); //pegando a coluna e qual id vai ser apagado
+
+      return res.status(201).redirect("/amostras");
+    } catch (error) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Item removindo com sucesso");
+      }
+    }
+  }
+
+  static async update(req, res) {
+    const id = req.body._id;
   }
 }
 module.exports = AmostraController;

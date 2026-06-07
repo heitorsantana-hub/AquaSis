@@ -16,6 +16,8 @@ router.get("/relatorios", protegerRota, RelatorioController.renderRelatorios);
 
 //Rota de listagem de clientes
 router.get("/clientes", protegerRota, ClienteController.renderLista);
+router.post("/clientes/editar/:id", protegerRota, ClienteController.atualizar);
+router.post("/clientes/deletar", protegerRota, ClienteController.deletar);
 
 // Rota para listar os funcionários ativos
 router.get("/funcionarios", protegerRota, FuncionarioController.renderLista);
@@ -33,6 +35,7 @@ router.post("/amostras/salvar", protegerRota, AmostraController.salvar);
 
 //Listagem de Amostras
 router.get("/amostras", protegerRota, AmostraController.renderLista);
+router.post("/amostras/deletar", protegerRota, AmostraController.delete);
 
 router.get("/funcionarios/novo", protegerRota, (req, res) => {
   res.render("cadastro-funcionario", {

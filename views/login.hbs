@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - AquaSis</title>
+    <!-- Ícone exato do FontAwesome (flask-vial) na cor Azul -->
+    <link rel="icon" type="image/svg+xml" href="https://api.iconify.design/fa6-solid/flask-vial.svg?color=%230284c7">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,16 +15,30 @@
 </head>
 <body class="bg-slate-50 flex h-screen">
 
-    <div class="hidden md:flex md:w-1/2 bg-sky-900 flex-col justify-center items-center p-12 relative overflow-hidden">
-        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-sky-800 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-sky-700 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+   <!-- ========================================== -->
+    <!-- METADE ESQUERDA (IMAGEM + OVERLAY AZUL)    -->
+    <!-- ========================================== -->
+    <div class="hidden md:flex md:w-1/2 flex-col justify-center items-center p-12 relative overflow-hidden bg-slate-900">
         
-        <div class="z-10 text-center">
-            <div class="w-24 h-24 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20">
+        <!-- CAMADA 1: A Imagem de Fundo -->
+        <!-- Substitua o src pelo caminho da foto que você quer usar -->
+        <img src="/img/IMG_2331.png" class="absolute inset-0 w-full h-full object-cover z-0" alt="Fundo Laboratório">
+
+        <!-- CAMADA 2: Película Azul transparente (80% de opacidade) -->
+        <div class="absolute inset-0 bg-sky-900/80 z-0"></div>
+
+        <!-- CAMADA 3: Efeitos de Luz (Blobs) que você já tinha -->
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-sky-400 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-sky-600 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
+        
+        <!-- CAMADA 4: O seu Conteúdo (Logo e Textos) -->
+        <!-- Atenção: mudei para 'relative z-10' para garantir que fique na frente da imagem -->
+        <div class="relative z-10 text-center">
+            <div class="w-24 h-24 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20 shadow-lg">
                 <i class="fa-solid fa-flask-vial text-5xl text-sky-300"></i>
             </div>
-            <h1 class="text-5xl font-bold text-white mb-4">AquaSis</h1>
-            <p class="text-xl text-sky-200 font-light max-w-md mx-auto">Gestão laboratorial inteligente para análises químicas e físicas.</p>
+            <h1 class="text-5xl font-bold text-white mb-4 shadow-sm">AquaSis</h1>
+            <p class="text-xl text-sky-100 font-light max-w-md mx-auto">Gestão laboratorial inteligente para análises químicas e físicas.</p>
         </div>
     </div>
 
