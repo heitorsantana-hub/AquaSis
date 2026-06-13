@@ -22,15 +22,23 @@
                 {{/each}}
             </select>
         </div>
+        
         <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">Tipo de Amostra</label>
-            <select name="tipo_amostra" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none" required>
-                <option value="" disabled selected>Selecione amostra cadastrada...</option>
-                {{#each clientes}}
-                <option value="{{this.id}}">{{this.nome}} ({{this.documento}})</option>
-                {{/each}}
-            </select>
-            <a href="">Adicionar Nova Determinação</a>
+            <div class="flex gap-2">
+                <select name="tipo_amostra" id="selectTipoAmostra" class="flex-1 border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none" required>
+                    <option value="" disabled selected>Selecione amostra cadastrada...</option>
+                    {{#each tiposAmostra}}
+                    <option value="{{this.id}}">{{this.nome}}</option>
+                    {{/each}}
+                </select>
+                <button type="button" onclick="abrirModalParaCriar()" class="px-4 py-2 bg-sky-100 text-sky-700 rounded-lg hover:bg-sky-200 transition-colors flex items-center justify-center" title="Cadastrar Novo Tipo">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button type="button" onclick="abrirModalParaEditar()" class="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors flex items-center justify-center" title="Editar Tipo Selecionado">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+            </div>
         </div>
         
         <div class="grid grid-cols-2 gap-4">
@@ -51,7 +59,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-2">Hora de Recebimento</label>
-                <input type="time" name="hora_recebimento"class="w-full border border-slate-300 rounded-lg p-2.5 outline-none" required>
+                <input type="time" name="hora_recebimento" class="w-full border border-slate-300 rounded-lg p-2.5 outline-none" required>
             </div>
         </div>
     </div>
@@ -99,28 +107,220 @@
             <label class="inline-flex items-center cursor-pointer">
                 <input type="radio" name="check_acidificacao" value="N.A." class="text-slate-500 focus:ring-slate-500"> <span class="ml-2 text-sm">N.A.</span>
             </label>
-        </div>
+        </div> 
     </div>
 
     <h4 class="font-semibold text-slate-800 mb-4 border-b border-slate-100 pb-2">Determinações</h4>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        {{#each analisesDisponiveis}}
-        <label class="flex items-center p-3 border border-slate-200 rounded-lg hover:bg-sky-50 cursor-pointer transition-colors">
-            <input type="checkbox" name="analises[]" value="{{this.id}}" class="w-5 h-5 text-sky-600 rounded focus:ring-sky-500 border-slate-300">
-            <span class="ml-3 text-sm text-slate-700 font-medium">{{this.nome}}</span>
-        </label>
-        {{/each}}
-    </div>
-
-    <div class="mb-8">
-        <label class="block text-sm font-medium text-slate-700 mb-2">Observações Adicionais (Ex: Cloro livre, análises customizadas)</label>
-        <textarea name="observacoes" rows="3" class="w-full border border-slate-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"></textarea>
-    </div>
-
-    <div class="flex justify-end gap-4 pt-4 border-t border-slate-200">
-        <button type="button" class="px-6 py-2.5 border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors">Cancelar</button>
-        <button type="submit" class="px-6 py-2.5 bg-sky-600 text-white font-medium rounded-lg hover:bg-sky-700 shadow-sm transition-colors shadow-sky-200">
-            <i class="fa-solid fa-check mr-2"></i> Registrar Amostra
+    
+    <div class="flex gap-2 mb-4">
+        <button type="button" onclick="marcarTodos(true)" class="text-xs bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-200 transition-colors font-medium">
+            Selecionar Todos
+        </button>
+        <button type="button" onclick="marcarTodos(false)" class="text-xs bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-200 transition-colors font-medium">
+            Desmarcar Todos
         </button>
     </div>
-</form>
+
+    <div id="containerDeterminacoes" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="col-span-full text-center py-4 text-sm text-slate-400 bg-slate-50 rounded-lg border border-dashed border-slate-200">
+            <i class="fa-solid fa-arrow-up mr-2"></i> Selecione um Tipo de Amostra para carregar os parâmetros deste grupo.
+        </div>
+    </div>
+
+    <div class="flex justify-end items-center gap-4 pt-6 border-t border-slate-200 mt-6">
+        <a href="/dashboard" class="px-6 py-2.5 border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors">
+            Cancelar
+        </a>
+        <button type="submit" class="px-6 py-2.5 bg-sky-600 text-white font-bold rounded-lg hover:bg-sky-700 shadow-sm transition-all shadow-sky-200 hover:shadow-sky-300 flex items-center">
+            <i class="fa-solid fa-floppy-disk mr-2"></i> Registrar Amostra
+        </button>
+    </div>
+</form> <div id="modal-tipo-amostra" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl mx-4 flex flex-col max-h-[90vh] overflow-hidden">
+        
+        <div class="flex justify-between items-center bg-slate-50 border-b border-slate-200 p-5">
+            <div>
+                <h3 id="modal-tipo-titulo" class="text-lg font-bold text-slate-800">Novo Tipo de Amostra</h3>
+                <p id="modal-tipo-subtitulo" class="text-xs text-slate-500 mt-1">Crie uma categoria e defina seu pacote padrão de análises.</p>
+            </div>
+            <button type="button" onclick="document.getElementById('modal-tipo-amostra').classList.add('hidden')" class="text-slate-400 hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-slate-200">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <form action="/amostras/tipos/salvar" method="POST" class="flex flex-col flex-1 overflow-hidden">
+            <input type="hidden" name="id" id="modal-tipo-id" value="">
+
+            <div class="p-6 overflow-y-auto flex-1">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Nome da Categoria <span class="text-red-500">*</span></label>
+                    <input type="text" name="nome" id="modal-tipo-nome" placeholder="Ex: Água Salobra, Efluente Industrial..." class="w-full border border-slate-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" required>
+                </div>
+
+                <div>
+                    <div class="mb-3 border-b border-slate-100 pb-2">
+                        <label class="block text-sm font-semibold text-slate-800">Determinações Padrão (Pacote)</label>
+                        <p class="text-xs text-slate-500 mt-1">Selecione as análises que já virão marcadas automaticamente.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 border border-slate-200 rounded-lg p-4 bg-slate-50 max-h-60 overflow-y-auto shadow-inner">
+                        {{#each todasDeterminacoes}}
+                        <label class="flex items-center p-2 rounded hover:bg-slate-200 cursor-pointer transition-colors border border-transparent hover:border-slate-300">
+                            <input type="checkbox" name="determinacoes[]" value="{{this.id}}" id="chk-modal-{{this.id}}" class="w-4 h-4 text-sky-600 rounded focus:ring-sky-500 border-slate-400 cursor-pointer">
+                            <span class="ml-3 text-sm text-slate-700 font-medium select-none">{{this.nome}} <span class="text-xs font-normal text-slate-500">({{this.unidade_medida}})</span></span>
+                        </label>
+                        {{/each}}
+                    </div>
+                </div>
+
+                <div class="mt-4 p-4 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div>
+                        <h5 class="text-sm font-medium text-slate-700">A análise que precisa não está na listagem acima?</h5>
+                        <p class="text-xs text-slate-500 mt-0.5">Cadastre um novo parâmetro no catálogo geral do laboratório.</p>
+                    </div>
+                    <button type="button" onclick="document.getElementById('modal-determinacao').classList.remove('hidden')" class="w-full sm:w-auto text-sm bg-sky-50 text-sky-700 border border-sky-200 px-4 py-2 rounded-lg hover:bg-sky-100 transition-colors font-semibold flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-plus mr-2"></i> Criar Nova Determinação
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-3 p-4 bg-slate-50 border-t border-slate-200">
+                <button type="button" onclick="document.getElementById('modal-tipo-amostra').classList.add('hidden')" class="px-5 py-2.5 border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-colors">
+                    Cancelar
+                </button>
+                <button type="submit" id="modal-tipo-btn-salvar" class="px-5 py-2.5 bg-sky-600 text-white font-medium rounded-lg hover:bg-sky-700 shadow-sm transition-colors flex items-center">
+                    <i class="fa-solid fa-check mr-2"></i> Cadastrar Tipo
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="modal-determinacao" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 flex flex-col overflow-hidden border border-slate-200">
+        
+        <div class="flex justify-between items-center bg-sky-50 border-b border-sky-100 p-4">
+            <div>
+                <h3 class="text-base font-bold text-sky-900"><i class="fa-solid fa-flask text-sky-600 mr-2"></i>Nova Determinação</h3>
+            </div>
+            <button type="button" onclick="document.getElementById('modal-determinacao').classList.add('hidden')" class="text-sky-400 hover:text-sky-700 transition-colors p-1 rounded-lg hover:bg-sky-200">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        
+        <form action="/determinacoes/salvar" method="POST" class="p-6">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700 mb-2">Nome da Análise <span class="text-red-500">*</span></label>
+                <input type="text" name="nome" placeholder="Ex: pH, Viscosidade, Coliformes..." class="w-full border border-slate-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" required>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-slate-700 mb-2">Unidade de Medida</label>
+                <input type="text" name="unidade_medida" placeholder="Ex: mg/L, mPa.s, NMP/100mL..." class="w-full border border-slate-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                <p class="text-xs text-slate-500 mt-1">Deixe em branco se não houver unidade.</p>
+            </div>
+            
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="document.getElementById('modal-determinacao').classList.add('hidden')" class="px-4 py-2 border border-slate-300 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-50 transition-colors">
+                    Voltar
+                </button>
+                <button type="submit" class="px-4 py-2 bg-sky-600 text-white text-sm font-medium rounded-lg hover:bg-sky-700 shadow-sm transition-colors flex items-center">
+                    <i class="fa-solid fa-save mr-2"></i> Salvar Análise
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    const selectTipo = document.getElementById('selectTipoAmostra');
+    const container = document.getElementById('containerDeterminacoes');
+
+    // Escuta a mudança do tipo de amostra na tela principal
+    selectTipo.addEventListener('change', async (e) => {
+        const tipoId = e.target.value;
+        if (!tipoId) return;
+        renderizarBoxesPrincipais(tipoId);
+    });
+
+    // Renderiza os checkboxes das determinações na tela principal
+    async function renderizarBoxesPrincipais(tipoId) {
+        try {
+            container.innerHTML = `
+                <div class="col-span-full text-center py-4 text-sm text-slate-500">
+                    <i class="fa-solid fa-spinner animate-spin mr-2"></i> Buscando análises do grupo...
+                </div>`;
+
+            const response = await fetch(`/api/determinacoes-por-tipo/${tipoId}`);
+            const determinacoes = await response.json();
+            
+            if (determinacoes.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-4 text-sm text-amber-600 bg-amber-50 rounded-lg border border-dashed border-amber-200">Nenhuma determinação vinculada a este grupo.</div>`;
+                return;
+            }
+            container.innerHTML = determinacoes.map(det => `
+                <label class="flex items-center p-3 border border-slate-200 rounded-lg hover:bg-sky-50 cursor-pointer transition-colors">
+                    <input type="checkbox" name="analises[]" value="${det.id}" class="w-5 h-5 text-sky-600 rounded focus:ring-sky-500 border-slate-300" checked>
+                    <span class="ml-3 text-sm text-slate-700 font-medium">${det.nome} ${det.unidade_medida ? `<span class="text-xs font-normal text-slate-400">(${det.unidade_medida})</span>` : ''}</span>
+                </label>
+            `).join('');
+        } catch (error) { 
+            console.error(error); 
+            container.innerHTML = `<div class="col-span-full text-center py-4 text-sm text-red-500 bg-red-50 rounded-lg border border-dashed border-red-200">Erro ao carregar determinações.</div>`;
+        }
+    }
+
+    // Reseta o modal para modo Criação (Novo Tipo)
+    function abrirModalParaCriar() {
+        document.getElementById('modal-tipo-id').value = "";
+        document.getElementById('modal-tipo-nome').value = "";
+        document.getElementById('modal-tipo-titulo').innerText = "Novo Tipo de Amostra";
+        document.getElementById('modal-tipo-subtitulo').innerText = "Crie uma categoria e defina seu pacote padrão de análises.";
+        document.getElementById('modal-tipo-btn-salvar').innerHTML = `<i class="fa-solid fa-check mr-2"></i> Cadastrar Tipo`;
+        
+        document.querySelectorAll('#modal-tipo-amostra input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.getElementById('modal-tipo-amostra').classList.remove('hidden');
+    }
+
+    // Configura o modal para modo Edição de Pacotes Existentes
+    async function abrirModalParaEditar() {
+        const select = document.getElementById('selectTipoAmostra');
+        const tipoId = select.value;
+        const tipoNome = select.options[select.selectedIndex]?.text;
+
+        if (!tipoId) {
+            alert("Por favor, selecione primeiro um Tipo de Amostra na listagem para poder editá-lo!");
+            return;
+        }
+
+        document.getElementById('modal-tipo-id').value = tipoId;
+        document.getElementById('modal-tipo-nome').value = tipoNome;
+        document.getElementById('modal-tipo-titulo').innerText = `Editar Pacote: ${tipoNome}`;
+        document.getElementById('modal-tipo-subtitulo').innerText = "Modifique o nome ou adicione/remova as determinações padrão deste tipo.";
+        document.getElementById('modal-tipo-btn-salvar').innerHTML = `<i class="fa-solid fa-save mr-2"></i> Salvar Alterações`;
+
+        document.querySelectorAll('#modal-tipo-amostra input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+        try {
+            const response = await fetch(`/api/determinacoes-por-tipo/${tipoId}`);
+            const associadas = await response.json();
+
+            associadas.forEach(det => {
+                const cb = document.getElementById(`chk-modal-${det.id}`);
+                if (cb) cb.checked = true;
+            });
+
+            document.getElementById('modal-tipo-amostra').classList.remove('hidden');
+        } catch (error) {
+            console.error("Erro ao carregar dados no modal:", error);
+            alert("Erro ao buscar parâmetros do pacote para edição.");
+        }
+    }
+
+    // Selecionar/Desmarcar todas as checkboxes da tela principal
+    function marcarTodos(status) {
+        document.querySelectorAll('input[name="analises[]"]').forEach(cb => cb.checked = status);
+    }
+</script>

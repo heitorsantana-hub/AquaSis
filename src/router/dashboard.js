@@ -7,6 +7,8 @@ const DashboardController = require("../controller/DashboardController");
 const ClienteController = require("../controller/ClienteController");
 const RelatorioController = require("../controller/RelatorioController");
 const FuncionarioController = require("../controller/FuncionarioController");
+const TipoAmostraController = require("../controller/TipoAmostraController.js");
+const DeterminacaoController = require("../controller/DeterminacaoController.js");
 
 // Rota para o dashboard principal com os dados
 router.get("/dashboard", protegerRota, DashboardController.renderDashboard);
@@ -32,10 +34,24 @@ router.get("/clientes/novo", protegerRota, (req, res) => {
 // Rota para renderizar a tela de cadastro de amostra
 router.get("/amostras/nova", protegerRota, AmostraController.renderNova);
 router.post("/amostras/salvar", protegerRota, AmostraController.salvar);
+router.post(
+  "/amostras/tipos/salvar",
+  protegerRota,
+  TipoAmostraController.criar,
+);
+router.post(
+  "/determinacoes/salvar",
+  protegerRota,
+  DeterminacaoController.criar,
+);
 
 //Listagem de Amostras
 router.get("/amostras", protegerRota, AmostraController.renderLista);
 router.post("/amostras/deletar", protegerRota, AmostraController.delete);
+router.get(
+  "/api/determinacoes-por-tipo/:id",
+  AmostraController.buscarDeterminacoesPorTipo,
+);
 
 router.get("/funcionarios/novo", protegerRota, (req, res) => {
   res.render("cadastro-funcionario", {

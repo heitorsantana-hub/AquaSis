@@ -1,7 +1,8 @@
 // controllers/AmostraController.js
 const ClienteModel = require("../models/ClienteModel");
-const ParametroModel = require("../models/ParametroModel.js");
 const AmostraModel = require("../models/AmostraModel");
+const TipoAmostraModel = require("../models/TipoAmostraModel");
+const DeterminacaoModel = require("../models/DeterminacaoModel.js");
 const supabase = require("../../config/supabase.js");
 
 class AmostraController {
@@ -9,19 +10,23 @@ class AmostraController {
   static async renderNova(req, res) {
     try {
       const clientes = await ClienteModel.listarTodos();
-      const parametros = await ParametroModel.listarTodos();
       const novoProtocolo = await AmostraModel.gerarProtocolo();
+      const tipo = await TipoAmostraModel.listarTodos();
+
+      // IMPORTANTE: Certifique-se de que no seu DeterminacaoModel o método se chama listarTodos()
+      const determinacao = await DeterminacaoModel.listarTodos();
 
       // Datas padrão para o front-end
       const hoje = new Date();
-      const dataAtual = hoje.toISOString().split("T")[0];
+      const dataAtual = PatternData(hoje);
       const horaAtual = hoje.toTimeString().split(" ")[0].substring(0, 5);
 
       res.render("cadastro-amostra", {
         pageTitle: "Cadastrar Amostra",
         activeAmostras: true,
         clientes,
-        analisesDisponiveis: parametros,
+        tiposAmostra: tipo,
+        todasDeterminacoes: determinacao,
         novoProtocolo,
         dataAtual,
         horaAtual,
@@ -52,11 +57,10 @@ class AmostraController {
         analises,
       } = req.body;
 
-      // Monta o objeto pra tabela 'amostras'
       const dadosNovaAmostra = {
         protocolo,
-        cliente_id,
-        tipo_amostra,
+        cliente_id: cliente_id,
+        tipo_amostra: tipo_amostra,
         data_coleta,
         hora_coleta,
         data_recebimento,
@@ -66,18 +70,18 @@ class AmostraController {
         chk_refrigeracao: check_refrigeracao,
         chk_acidificacao: check_acidificacao,
         observacoes,
-        funcionario_recepcao_id: req.session.usuario.id, // Pega quem logou!
+        funcionario_recepcao_id: req.session.usuario.id,
       };
 
-      // O array de análises vem do HTML como name="analises[]"
-      // Se só um for marcado, o JS manda como String, então forçamos virar Array
+      // Força o envio das análises virar um Array, mesmo se apenas uma checkbox for marcada
       let arrayAnalises = analises;
       if (typeof analises === "string") arrayAnalises = [analises];
+      if (!analises) arrayAnalises = []; // Evita quebra se nenhuma análise for enviada
 
-      // Chama o Model para salvar
+      // Chama o Model para salvar a amostra e seus vínculos
       await AmostraModel.criar(dadosNovaAmostra, arrayAnalises);
 
-      res.redirect("/dashboard"); // Sucesso! Volta pro dashboard
+      res.redirect("/dashboard");
     } catch (error) {
       console.error("Erro ao salvar amostra:", error);
       res.status(500).send("Erro ao salvar amostra no banco de dados.");
@@ -86,13 +90,12 @@ class AmostraController {
 
   static async renderLista(req, res) {
     try {
-      //Chamando o banco para dentro do controller
       const amostrasBanco = await AmostraModel.listarTodas();
 
       const amostrasFormatadas = amostrasBanco.map((amostra) => ({
         _id: amostra.id,
         protocolo: amostra.protocolo,
-        tipo_amostra: amostra.tipo_amostra,
+        tipo_amostra: amostra.tipo_amostras?.nome,
         data_recebimento: amostra.data_recebimento,
         status: amostra.status,
         data_coleta: amostra.data_coleta,
@@ -106,34 +109,64 @@ class AmostraController {
         amostras: amostrasFormatadas,
       });
     } catch (error) {
-      console.log(error);
+      console.error("Erro ao listar amostras:", error);
+      res.redirect("/amostras");
     }
   }
 
   static async delete(req, res) {
     try {
-      //pegando id do html
       const amostra_id = req.body.amostra_id;
-      console.log("Id que apareceu: " + amostra_id);
+      console.log("Id deletado: " + amostra_id);
 
-      //puxando a função que apaga no banco de dados
-      const { data, error } = await supabase
-        .from("amostras") //qual tabela
-        .delete() //função de apagar
-        .eq("id", amostra_id); //pegando a coluna e qual id vai ser apagado
+      // Delegação de exclusão para o Model correspondente (AmostraModel)
+      await AmostraModel.deletar(amostra_id);
 
       return res.status(201).redirect("/amostras");
     } catch (error) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Item removindo com sucesso");
-      }
+      console.error("Erro ao deletar amostra:", error);
+      return res.status(500).send("Erro ao tentar remover a amostra.");
     }
   }
 
-  static async update(req, res) {
-    const id = req.body._id;
+  // API consumida via Fetch pelo Front-end para carregar as caixinhas dinâmicas
+  static async buscarDeterminacoesPorTipo(req, res) {
+    try {
+      const { id } = req.params;
+
+      const { data, error } = await supabase
+        .from("tipo_amostra_determinacoes")
+        .select(
+          `
+          determinacao_id,
+          determinacoes (
+            id,
+            nome,
+            unidade_medida
+          )
+        `,
+        )
+        .eq("tipo_amostra_id", id);
+
+      if (error) throw error;
+
+      const listaFormatada = data
+        .filter((item) => item.determinacoes)
+        .map((item) => item.determinacoes);
+
+      return res.json(listaFormatada);
+    } catch (error) {
+      console.error("Erro na API de busca de determinações:", error);
+      return res
+        .status(500)
+        .json({ error: "Erro interno ao buscar parâmetros do grupo" });
+    }
   }
 }
+
+// Função auxiliar para formatar a data padrão YYYY-MM-DD
+function PatternData(date) {
+  return date.toISOString().split("T")[0];
+}
+
 module.exports = AmostraController;

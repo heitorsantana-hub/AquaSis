@@ -40,9 +40,17 @@ class AmostraModel {
 
     // 2. Insere os parâmetros selecionados na tabela de resultados (em branco)
     if (arrayDeAnalises && arrayDeAnalises.length > 0) {
-      const resultadosParaInserir = arrayDeAnalises.map((parametro_id) => ({
-        amostra_id: amostra.id,
-        parametro_id: parametro_id,
+      const resultadosParaInserir = arrayDeAnalises.map((analise_id) => ({
+        amostra_id: amostra.id, // Aqui está correto, recebe o UUID da amostra gerada acima
+
+        // CORREÇÃO AQUI: Depende de como está a coluna "parametro_id" na tabela "resultados":
+        //
+        // Opção A: Se a coluna no banco for INTEGER (número):
+        parametro_id: Number(analise_id),
+
+        // Opção B: Se a coluna no banco for UUID:
+        // parametro_id: analise_id, // (Mas aí o frontend terá que enviar o UUID em vez de '4')
+
         valor_resultado: null, // Deixa nulo pro Químico preencher depois
       }));
 
@@ -108,10 +116,20 @@ class AmostraModel {
       .select(
         `
           *,
-          clientes(nome)
+          clientes(nome),
+          tipo_amostras(nome)
         `,
       )
       .order("created_at", { ascending: false });
+    if (error) throw error;
+    return data;
+  }
+
+  static async deletar(id) {
+    const { data, error } = await supabase
+      .from("amostras")
+      .delete()
+      .eq("id", id);
     if (error) throw error;
     return data;
   }

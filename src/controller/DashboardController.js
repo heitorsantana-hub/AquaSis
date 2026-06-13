@@ -4,35 +4,97 @@ const AmostraModel = require("../models/AmostraModel");
 class DashboardController {
   static async renderDashboard(req, res) {
     try {
-      // 1. Buscamos os dados reais do banco usando o seu Model
+      // 1. Buscamos os dados básicos do banco
       const estatisticas = await AmostraModel.obterEstatisticas();
       const ultimasAmostras = await AmostraModel.listarUltimas(5);
 
-      // 2. Realizamos a lógica de negócio (Cálculos)
+      // Precisamos de todas as amostras para montar os gráficos e os cards mensais
+      const todasAmostras = await AmostraModel.listarTodas();
+
+      // 2. Cálculos dos Cards Globais
       const amostrasPendentes = estatisticas.pendentes + estatisticas.validacao;
       const totalAmostras = amostrasPendentes + estatisticas.laudos;
-
-      // Calcula a % de amostras já concluídas (evita divisão por zero)
       const taxaProcessamento =
         totalAmostras === 0
           ? 0
           : Math.round((estatisticas.laudos / totalAmostras) * 100);
 
-      // ATENÇÃO: Como não há método financeiro nos models enviados,
-      // as variáveis de faturamento estão mockadas. Futuramente você substitui
-      // por chamadas como `await FinanceiroModel.obterFaturamentoMensal()`.
-      const faturamentoMensal = "40.000,00";
-      const faturamentoAnual = "215.000,00";
+      // 3. Variáveis de contagem de Tempo (Mês atual e últimos 6 meses)
+      const dataAtual = new Date();
+      const mesAtual = dataAtual.getMonth();
+      const anoAtual = dataAtual.getFullYear();
 
-      // 3. Renderizamos a página passando o objeto com as variáveis do Handlebars
+      let amostrasMes = 0;
+      let laudosMes = 0;
+
+      // Arrays para os Gráficos
+      const contagemTipos = {}; // Para o gráfico de Rosca
+      const contagemMeses = {}; // Para o gráfico de Linhas
+      const nomesMeses = [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez",
+      ];
+
+      // Pré-preenche os últimos 6 meses zerados para o Gráfico de Linha não quebrar
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(anoAtual, mesAtual - i, 1);
+        const chaveMes = `${nomesMeses[d.getMonth()]}/${d.getFullYear().toString().slice(-2)}`;
+        contagemMeses[chaveMes] = 0;
+      }
+
+      // 4. Varre todas as amostras distribuindo os dados para os gráficos e cards
+      todasAmostras.forEach((amostra) => {
+        // Pega a data (criada em ou data de recebimento)
+        const dataAmostra = new Date(
+          amostra.created_at || amostra.data_recebimento,
+        );
+        const amostraMes = dataAmostra.getMonth();
+        const amostraAno = dataAmostra.getFullYear();
+
+        // Lógica dos Cards (Apenas do Mês Atual)
+        if (amostraMes === mesAtual && amostraAno === anoAtual) {
+          amostrasMes++;
+          if (amostra.status === "Concluído") laudosMes++;
+        }
+
+        // Lógica do Gráfico de Rosca (Tipos de Matriz)
+        const nomeTipo = amostra.tipo_amostras?.nome || "Outros";
+        contagemTipos[nomeTipo] = (contagemTipos[nomeTipo] || 0) + 1;
+
+        // Lógica do Gráfico de Linha (Soma +1 se a amostra for de um dos últimos 6 meses)
+        const chaveMesGrafico = `${nomesMeses[amostraMes]}/${amostraAno.toString().slice(-2)}`;
+        if (contagemMeses[chaveMesGrafico] !== undefined) {
+          contagemMeses[chaveMesGrafico]++;
+        }
+      });
+
+      // 5. Renderizamos a página passando tudo (JSON.stringify envia as listas no formato correto pro JS do front)
       res.render("dashboard", {
         pageTitle: "Visão Geral",
-        activeDashboard: true, // Acende o botão na sidebar
-        faturamentoMensal,
-        faturamentoAnual,
+        activeDashboard: true,
+
+        // Dados dos Cards
+        amostrasMes,
+        laudosMes,
         taxaProcessamento,
         amostrasPendentes,
         ultimasAmostras,
+
+        // Dados dos Gráficos
+        graficoRoscaLabels: JSON.stringify(Object.keys(contagemTipos)),
+        graficoRoscaDados: JSON.stringify(Object.values(contagemTipos)),
+        graficoLinhaLabels: JSON.stringify(Object.keys(contagemMeses)),
+        graficoLinhaDados: JSON.stringify(Object.values(contagemMeses)),
       });
     } catch (error) {
       console.error("Erro ao processar os dados do dashboard:", error);
