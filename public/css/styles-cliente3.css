@@ -1,0 +1,188 @@
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .centered-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .centered-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 480px; 
+            padding: 2rem 2.5rem 3rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        /* Header com Logo e Linha Divisória */
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo-icon {
+            background-color: #007bc0;
+            padding: 0.4rem;
+            border-radius: 0.5rem;
+            display: flex;
+        }
+
+        .logo-icon svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: white;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #004b75;
+            letter-spacing: -0.5px;
+        }
+
+        /* Textos de Instrução */
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 1rem 0;
+            text-align: center;
+        }
+
+        .instruction-text {
+            font-size: 1rem;
+            color: #4b5563;
+            text-align: center;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+
+        .contact-highlight {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* Container dos Inputs de Código (6 dígitos) */
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .otp-input {
+            width: 45px;
+            height: 55px;
+            border: 1px solid #007bc0; /* Azul AquaSis igual à referência */
+            border-radius: 6px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            color: #004b75;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .otp-input:focus {
+            box-shadow: 0 0 0 3px rgba(0, 123, 192, 0.15);
+            background-color: #f0f9ff;
+        }
+
+        /* Timer e Reenvio */
+        .resend-box {
+            text-align: center;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+
+        .timer-text {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .link-resend {
+            color: #9ca3af; /* Cinza enquanto o timer corre */
+            text-decoration: underline;
+            cursor: not-allowed;
+        }
+
+        .link-resend.active {
+            color: #007bc0;
+            cursor: pointer;
+        }
+
+        /* Link de trocar meio de contato */
+        .change-method-box {
+            margin-bottom: 2.5rem;
+        }
+
+        .link-change-method {
+            color: #004b75;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .link-change-method:hover {
+            color: #007bc0;
+        }
+
+        /* Botões de Ação */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .btn-back {
+            flex: 1;
+            text-align: center;
+            color: #004b75;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 1rem 0;
+        }
+
+        .btn-validate {
+            flex: 1.5;
+            background-color: #e5e7eb; /* Inativo inicialmente */
+            color: #6b7280;
+            border: none;
+            padding: 1rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            cursor: not-allowed;
+            font-family: inherit;
+        }
+
+        /* Classe para ativar o botão via JS quando os 6 campos forem preenchidos */
+        .btn-validate.active {
+            background-color: #d97706; /* Laranja conforme referência */
+            color: white;
+            cursor: pointer;
+        }

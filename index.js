@@ -48,10 +48,12 @@ app.use((req, res, next) => {
 // Importação das Rotas
 const authRoutes = require("./src/router/auth.js");
 const dashboardRoutes = require("./src/router/dashboard.js");
+const userRoutes = require("./src/router/user.js");
 
 // Registrando as Rotas no Express
 app.use("/", authRoutes);
 app.use("/", dashboardRoutes);
+app.use("/", userRoutes);
 
 app.listen(PORT, () => {
   console.log(

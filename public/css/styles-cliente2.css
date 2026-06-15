@@ -1,0 +1,197 @@
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .centered-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .centered-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 480px; 
+            padding: 2rem 2.5rem 3rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        /* Header com Logo e Linha Divisória */
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo-icon {
+            background-color: #007bc0;
+            padding: 0.4rem;
+            border-radius: 0.5rem;
+            display: flex;
+        }
+
+        .logo-icon svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: white;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #004b75;
+            letter-spacing: -0.5px;
+        }
+
+        /* Título da Pergunta */
+        .question-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #4b5563;
+            margin: 0 0 2rem 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Formulário */
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Opções de Seleção (Radio Buttons customizados) */
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .option-label {
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Esconde o input radio padrão */
+        .option-label input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* Estilo da caixa de opção */
+        .option-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .option-icon {
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-icon svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .option-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* Efeito Hover */
+        .option-label:hover .option-content {
+            border-color: #9ca3af;
+            background-color: #f9fafb;
+        }
+
+        /* Efeito de Selecionado (Quando o input radio está checked) */
+        .option-label input[type="radio"]:checked + .option-content {
+            border-color: #007bc0;
+            background-color: #f0f9ff; /* Azul bem clarinho no fundo */
+            box-shadow: 0 0 0 1px #007bc0; /* Borda um pouco mais grossa */
+        }
+
+        .option-label input[type="radio"]:checked + .option-content .option-icon {
+            color: #007bc0; /* Ícone fica azul */
+        }
+
+        .option-label input[type="radio"]:checked + .option-content .option-text {
+            color: #004b75;
+        }
+
+        /* Botões de Ação */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            flex: 1;
+            text-align: center;
+            color: #004b75;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 1rem 0;
+            transition: color 0.2s;
+        }
+
+        .btn-back:hover {
+            color: #007bc0;
+            text-decoration: underline;
+        }
+
+        .btn-next {
+            flex: 1;
+            background-color: #d97706; /* Laranja (Ativo) */
+            color: white;
+            border: none;
+            padding: 1rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-next:hover {
+            background-color: #b45309;
+        }
+
+        /* Caso queira deixar o botão cinza enquanto nada for selecionado, você pode usar a classe abaixo via JS */
+        .btn-next.disabled {
+            background-color: #e5e7eb;
+            color: #6b7280;
+            cursor: not-allowed;
+        }

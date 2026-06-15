@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSis - Validar Código</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles-cliente3.css">
+
+</head>
+<body>
+
+    <div class="centered-wrapper">
+        
+        <div class="centered-card">
+            
+            <div class="brand-header">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                    </svg>
+                </div>
+                <span class="brand-name">AquaSis</span>
+            </div>
+
+            <h2 class="step-title">Código Enviado!</h2>
+            
+            <p class="instruction-text">
+                Por favor, informe o código que enviamos para o número <span class="contact-highlight">+55 7* ****-3049</span>.
+            </p>
+
+            <form class="login-form" style="width: 100%;">
+                
+                <div class="otp-container">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric">
+                </div>
+
+                <div class="resend-box">
+                    Não recebeu o código? <span class="timer-text">51s</span> <span class="link-resend">enviar novo código</span>
+                </div>
+
+                <div class="change-method-box" style="text-align: center;">
+                    <a href="/login/escolher-metodo" class="link-change-method">Escolher outro meio de contato</a>
+                </div>
+
+                <div class="button-group">
+                    <a href="/login/escolher-metodo" class="btn-back">VOLTAR</a>
+                    <button type="submit" class="btn-validate">VALIDAR CÓDIGO</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll('.otp-input');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

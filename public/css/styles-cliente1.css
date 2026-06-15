@@ -1,0 +1,234 @@
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .centered-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .centered-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 480px; 
+            /* Reduzi um pouco o padding superior para compensar a linha divisória */
+            padding: 2rem 2.5rem 3rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        /* Header com Logo e Linha Divisória */
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb; /* Linha cinza clara igual a referência */
+        }
+
+        .logo-icon {
+            background-color: #007bc0;
+            padding: 0.4rem;
+            border-radius: 0.5rem;
+            display: flex;
+        }
+
+        .logo-icon svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: white;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #004b75;
+            letter-spacing: -0.5px;
+        }
+
+        /* Ícone de Login e Título */
+        .login-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-icon-wrapper svg {
+            width: 3rem;
+            height: 3rem;
+            color: #004b75;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #004b75;
+            margin: 0;
+        }
+
+        /* Formulário */
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Campo de Input */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .input-group label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #1f2937;
+            border: 1px solid #9ca3af;
+            border-radius: 0.375rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #007bc0;
+            box-shadow: 0 0 0 3px rgba(0, 123, 192, 0.1);
+        }
+
+        /* Classe para o estado de erro (borda vermelha e fundo rosinha) */
+        .input-error input {
+            border-color: #dc2626 !important;
+            background-color: #fef2f2 !important;
+            color: #b91c1c !important;
+        }
+
+        /* Toggle "Lembrar dados" */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #007bc0; /* Fica azul quando ativado */
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .toggle-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* Botões de Ação */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            flex: 1;
+            text-align: center;
+            color: #004b75;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 1rem 0;
+            transition: color 0.2s;
+        }
+
+        .btn-back:hover {
+            color: #007bc0;
+            text-decoration: underline;
+        }
+
+        .btn-next {
+            flex: 1;
+            background-color: #e5e7eb; /* Cinza claro da referência (estado inativo) */
+            color: #6b7280; /* Texto cinza */
+            border: none;
+            padding: 1rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        /* Adicione essa classe via JavaScript quando o usuário digitar um CPF válido para "acender" o botão */
+        .btn-next.active {
+            background-color: #d97706; /* Laranja */
+            color: white;
+        }
+
+        .btn-next.active:hover {
+            background-color: #b45309;
+        }
