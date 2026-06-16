@@ -78,6 +78,27 @@ class DashboardController {
         }
       });
 
+      const contagemClientes = {};
+
+      todasAmostras.forEach((amostra) => {
+        const nomeCliente = amostra.clientes?.nome;
+        if (nomeCliente) {
+          contagemClientes[nomeCliente] =
+            (contagemClientes[nomeCliente] || 0) + 1;
+        }
+      });
+
+      // 2. Descobre quem é o campeão
+      let topClienteNome = "Sem Dados";
+      let topClienteQuantidade = 0;
+
+      for (const [cliente, quantidade] of Object.entries(contagemClientes)) {
+        if (quantidade > topClienteQuantidade) {
+          topClienteQuantidade = quantidade;
+          topClienteNome = cliente;
+        }
+      }
+
       // 5. Renderizamos a página passando tudo (JSON.stringify envia as listas no formato correto pro JS do front)
       res.render("dashboard", {
         pageTitle: "Visão Geral",
@@ -89,6 +110,8 @@ class DashboardController {
         taxaProcessamento,
         amostrasPendentes,
         ultimasAmostras,
+        topClienteNome,
+        topClienteQuantidade,
 
         // Dados dos Gráficos
         graficoRoscaLabels: JSON.stringify(Object.keys(contagemTipos)),

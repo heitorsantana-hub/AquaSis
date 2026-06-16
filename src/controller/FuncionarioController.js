@@ -27,7 +27,7 @@ class FuncionarioController {
 
       res.render("lista-funcionario", {
         pageTitle: "Equipe do Laboratório",
-        activeFuncionariosE: true,
+        activeFuncionarioE: true,
         funcionarios: funcionariosFormatados,
       });
     } catch (error) {

@@ -51,8 +51,8 @@
                     <a href="/amostras" class="flex items-center p-2 rounded-lg hover:bg-sky-800 transition-colors text-sm text-sky-200 hover:text-white {{#if activeAmostrasL}}bg-sky-800 text-white font-medium{{/if}}">
                         <i class="fa-solid fa-list-check w-5"></i> Listar
                     </a>
-                    <a href="/amostras/tipos" class="flex items-center p-2 rounded-lg hover:bg-sky-800 transition-colors text-sm text-sky-200 hover:text-white {{#if activeAmostrasT}}bg-sky-800 text-white font-medium{{/if}}">
-                        <i class="fa-solid fa-tags w-5"></i> Tipo de Amostras
+                    <a href="/lista" class="flex items-center p-2 rounded-lg hover:bg-sky-800 transition-colors text-sm text-sky-200 hover:text-white {{#if activeAmostrasT}}bg-sky-800 text-white font-medium{{/if}}">
+                        <i class="fa-solid fa-tags w-5"></i> Resultado
                     </a>
                 </div>
             </details>
@@ -83,13 +83,27 @@
                     <i class="fa-solid fa-file-pdf w-6"></i> Relatórios e Laudos
                 </a>
 
-                <a href="/funcionarios" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionariosE}}bg-sky-800{{/if}}">
-                    <i class="fa-solid fa-user-shield w-6"></i> Equipe / Funcionários
+                <details class="group" {{#if activeFuncionariosE}}open{{/if}} {{#if activeFuncionarioC}}open{{/if}} >
+                <summary class="flex items-center justify-between p-3 rounded-lg hover:bg-sky-800 transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden {{#if activeFuncionarioE}}bg-sky-800{{/if}} {{#if activeFuncionarioC}}bg-sky-800{{/if}}">
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-vials w-6"></i>
+                        <span class="ml-2">Funcionários</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-sm transition-transform duration-200 group-open:-rotate-180"></i>
+                </summary>
+                
+                <div class="pl-11 pr-2 py-2 space-y-1">
+                    <a href="/funcionarios" class="flex items-center p-2 rounded-lg hover:bg-sky-800 transition-colors text-sm text-sky-200 hover:text-white {{#if activeFuncionarioE}}bg-sky-800 text-white font-medium{{/if}}">
+                    <i class="fa-solid fa-user-shield w-6"></i> Listar
                 </a>
 
-                <a href="/funcionarios/novo" class="flex items-center p-3 rounded-lg hover:bg-sky-800 transition-colors {{#if activeFuncionarioC}}bg-sky-800{{/if}}">
-                    <i class="fa-solid fa-user-plus w-6"></i> Cadastro / Funcionários
+                <a href="/funcionarios/novo" class="flex items-center p-2 rounded-lg hover:bg-sky-800 transition-colors text-sm text-sky-200 hover:text-white {{#if activeFuncionarioC}}bg-sky-800 text-white font-medium{{/if}}">
+                    <i class="fa-solid fa-user-plus w-6"></i> Cadastrar
                 </a>
+                </div>
+            </details>
+
+            
             </div>
             {{/if}}
         </nav>

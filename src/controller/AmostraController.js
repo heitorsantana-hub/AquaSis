@@ -162,6 +162,34 @@ class AmostraController {
         .json({ error: "Erro interno ao buscar parâmetros do grupo" });
     }
   }
+
+  static async renderFilaAnalises(req, res) {
+    try {
+      // 1. Busca as amostras no banco
+      const amostrasBanco = await AmostraModel.listarTodas();
+
+      // 2. Filtra apenas as que precisam de resultados e formata para o Handlebars
+      const amostrasPendentes = amostrasBanco
+        .filter((amostra) => amostra.status !== "Concluído") // Esconde as finalizadas
+        .map((amostra) => ({
+          _id: amostra.id,
+          protocolo: amostra.protocolo,
+          tipo_amostra: amostra.tipo_amostras?.nome || "Não definido",
+          status: amostra.status,
+          data_coleta: amostra.data_coleta,
+          cliente_nome: amostra.clientes?.nome || "Cliente sem Nome",
+        }));
+
+      // 3. Desenha a tela
+      res.render("fila-analises", {
+        pageTitle: "Fila de Análises",
+        amostras: amostrasPendentes,
+      });
+    } catch (error) {
+      console.error("Erro ao listar fila de análises:", error);
+      res.redirect("/dashboard");
+    }
+  }
 }
 
 // Função auxiliar para formatar a data padrão YYYY-MM-DD

@@ -1,0 +1,81 @@
+<div class="flex items-center justify-between mb-6">
+    <div>
+        <h1 class="text-2xl font-semibold text-slate-800"><i class="fa-solid fa-microscope text-sky-600 mr-2"></i>Fila de Análises</h1>
+        <p class="text-sm text-slate-500 mt-1">Selecione uma amostra da lista abaixo para lançar os resultados das determinações.</p>
+    </div>
+    <!-- Um pequeno atalho útil para o químico -->
+    <div class="bg-sky-50 text-sky-700 px-4 py-2 rounded-lg border border-sky-100 text-sm font-medium">
+        <i class="fa-solid fa-clock-rotate-left mr-2"></i> {{amostras.length}} Amostras na Fila
+    </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
+                    <th class="p-4 font-medium">Protocolo / Data</th>
+                    <th class="p-4 font-medium">Cliente</th>
+                    <th class="p-4 font-medium">Matriz</th>
+                    <th class="p-4 font-medium">Status Atual</th>
+                    <th class="p-4 font-medium text-right">Ação</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-sm">
+                
+                {{#each amostras}}
+                <tr class="hover:bg-sky-50/30 transition-colors">
+                    
+                    <td class="p-4">
+                        <p class="font-bold text-slate-800">{{this.protocolo}}</p>
+                        <p class="text-xs text-slate-500 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i> Coleta: {{this.data_coleta}}</p>
+                    </td>
+                    
+                    <td class="p-4 font-medium text-slate-700">
+                        {{this.cliente_nome}}
+                    </td>
+
+                    <td class="p-4 text-slate-600">
+                        {{this.tipo_amostra}}
+                    </td>
+                    
+                    <td class="p-4">
+                        {{#if (eq this.status 'Recebida')}}
+                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
+                                Aguardando Análise
+                            </span>
+                        {{else if (eq this.status 'Em Análise')}}
+                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-sky-100 text-sky-700 border border-sky-200">
+                                Em Andamento
+                            </span>
+                        {{else}}
+                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                Concluído
+                            </span>
+                        {{/if}}
+                    </td>
+                    
+                    <td class="p-4 text-right">
+                        <!-- Este é o botão mágico! Ele envia o químico direto para a tela do Controller que criamos -->
+                        <a href="/resultados/{{this._id}}" 
+                           class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-sky-100 text-sky-700 hover:bg-sky-600 hover:text-white border border-sky-200 hover:border-sky-600 font-medium rounded-lg transition-all shadow-sm">
+                            <i class="fa-solid fa-pen-to-square"></i> Lançar
+                        </a>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="5" class="p-12 text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 mb-4 text-slate-300 text-3xl">
+                            <i class="fa-solid fa-check-double"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-slate-800 mb-1">Fila Limpa!</h3>
+                        <p class="text-slate-500 text-sm">Não há amostras aguardando lançamento de resultados no momento.</p>
+                    </td>
+                </tr>
+                {{/each}}
+                
+            </tbody>
+        </table>
+    </div>
+</div>
